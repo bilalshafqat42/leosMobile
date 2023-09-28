@@ -3,65 +3,111 @@ import {
   StyleSheet,
   Text,
   View,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  Image,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import {
   responsiveHeight,
-  responsiveWidth,
   responsiveFontSize,
+  responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import { Colors } from '../../../services/utilities/Colors';
 import { AppStyles } from '../../../services/utilities/AppStyle';
-import InputField from '../../../components/InputField';
-import Header from '../../../components/Header';
-import Button from '../../../components/Button';
+import RNFetchBlob from 'rn-fetch-blob';
 import { fontSize } from '../../../services/utilities/Fonts';
-import { scale } from 'react-native-size-matters';
+import Header from '../../../components/Header';
 
-const unitsData = [
-  { id: '1', name: 'Unit 01' },
-  { id: '2', name: 'Unit 02' },
-  { id: '3', name: 'Unit 03' },
-  // Add more items as needed
-];
+const Units = ({ navigation, route }) => {
+  const { image, fieldNames, fieldData } = route.params;
 
-const Units = ({ navigation }) => {
-  const [isChecked, setIsChecked] = React.useState(false);
-  const toggleCheck = () => {
-    setIsChecked((prevChecked) => !prevChecked);
+  const handleDownloadPDF = async (fieldData) => {
+    if (!fieldData) {
+      console.error('PDF URL is undefined.');
+      return;
+    }
+
+    try {
+      // Create a directory to store the downloaded PDFs (you can change the directory as needed)
+      const dirs = RNFetchBlob.fs.dirs;
+      const downloadDir = dirs.DownloadDir;
+
+      // Extract the filename from the URL (e.g., 'document.pdf')
+      const filename = fieldData.pushString()
+      // Create a path for the downloaded file
+      const filePath = `${downloadDir}/${filename}`;
+
+      // Start the download
+      const res = await RNFetchBlob.config({
+        fileCache: true,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          title: 'Downloading PDF',
+          description: 'Downloading PDF file',
+          path: filePath,
+        },
+      }).fetch('GET', fieldData);
+
+      // Check the download status
+      if (res.respInfo.status === 200) {
+        console.log('PDF downloaded successfully to:', filePath);
+
+        // Now, you can open the downloaded PDF using a PDF viewer library
+        // Here, we use 'rn-pdf-reader-js' for demonstration purposes
+        // You can replace this with your preferred PDF viewer library
+        navigation.navigate('PDFViewer', { filePath }); // Navigate to a PDF viewer screen
+
+      } else {
+        console.error('Error downloading PDF:', res.respInfo);
+      }
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
   };
-  const isButtonDisabled = !isChecked;
-  const buttonColor = isButtonDisabled ? Colors.disabledButton : Colors.button1;
-  const back = () => {
-    navigation.goBack();
-  };
 
-  const renderUnitItem = ({ item }) => (
-    <View style={{alignItems:'center'}}>
-    <View style={styles.container}>
-      <Text style={[AppStyles.fvrtText, { fontSize: responsiveFontSize(2), fontWeight: 'bold' }]}>
-        {item.name}
-      </Text>
-      <TouchableOpacity style={styles.pdf}>
-        <Text style={{ fontSize: responsiveFontSize(1.7), color: Colors.lebal, backgroundColor: Colors.backgroud1, height: responsiveHeight(3), alignContent: 'center', padding: '3%', paddingLeft: '10%' }}>
-          Download pdf
+
+  const renderUnitItem = ({ item, index }) => (
+    <View style={{ alignItems: 'center' }}>
+      <View style={styles.container}>
+        <Text
+          style={[
+            AppStyles.fvrtText,
+            { fontSize: responsiveFontSize(2), fontWeight: 'bold' },
+          ]}
+        >
+          {fieldNames[index]}
         </Text>
-      </TouchableOpacity>
-    </View>
+       
+        <TouchableOpacity style={styles.pdf} onPress={() => handleDownloadPDF(fieldData[index])}>
+          <Text
+            style={{
+              fontSize: responsiveFontSize(1.7),
+              color: Colors.lebal,
+              backgroundColor: Colors.backgroud1,
+              height: responsiveHeight(3),
+              alignContent: 'center',
+              padding: '3%',
+              paddingLeft: '10%',
+            }}
+          >
+            Download PDF
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   return (
     <>
-      <Header Image={true} onPress={back} />
+    <Header Image={true} />
       <FlatList
-        data={unitsData}
+        data={fieldNames} // Use fieldNames as the data source
         renderItem={renderUnitItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={[AppStyles.contentContainer, { backgroundColor: Colors.backgroud1 }]}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={[
+          AppStyles.contentContainer,
+          { backgroundColor: Colors.backgroud1 },
+        ]}
       />
     </>
   );
@@ -78,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: responsiveHeight(1)
+    marginBottom: responsiveHeight(1),
   },
   pdf: {
     width: responsiveWidth(27),
@@ -90,8 +136,8 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(5),
   },
   toggle: {
-    width: scale(21),
-    height: scale(21),
+    width: responsiveWidth(21),
+    height: responsiveHeight(21),
     borderRadius: 5,
     backgroundColor: Colors.fieldBackground,
     marginLeft: responsiveWidth(10),
@@ -101,9 +147,5 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.toggleText,
     fontSize: fontSize.lebal,
-  },
-  tick: {
-    width: responsiveWidth(5),
-    height: responsiveWidth(5),
   },
 });

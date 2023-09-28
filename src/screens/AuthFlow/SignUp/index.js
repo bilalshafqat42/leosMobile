@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Image
   } from 'react-native';
-  import React, {useState, useEffect} from 'react';
+  import React, {useState, useEffect, useContext} from 'react';
   import {scale} from 'react-native-size-matters';
   import {
     responsiveHeight,
@@ -21,12 +21,56 @@ import InputField from '../../../components/InputField';
 import Header from '../../../components/Header';
 import Button from '../../../components/Button';
 import { fontSize } from '../../../services/utilities/Fonts';
+import { AuthContext } from '../../../navigation/AuthProvider';
+import Toast from 'react-native-simple-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
   
   const SignUp = ({navigation}) => {
+    const {register, user} = useContext(AuthContext);
+    const isValidEmail = email => {
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+      return emailRegex.test(email);
+    };
+  
+    const isValidPassword = password => {
+      return password.length >= 8;
+    };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
    const Home= () =>{
-    navigation.navigate('App')
-   }
+    if (!isValidEmail(email)) {
+      throw new Error('Invalid email address');
+    }
+
+    if (!isValidPassword(password)) {
+      throw new Error('Password must have at least 8 characters');
+    }
+
+   
+    
+      register(email, password)
+  //       .then((user) => {
+         
+  //         if (user) {
+  //          navigation.navigate('App')
+  //         } else {
+  //           Toast.show('Registration failed', Toast.LONG);
+  //         }
+  //       })
+  //       .catch((error) => {
+         
+  //         console.error(error);
+  //         Toast.show('Registration error', Toast.LONG);
+  //       });
+    
+  // } catch (error) {
+  //   Toast.show(error.message, Toast.LONG);
+  // }
+  }
     const back = () =>{
+
       navigation.goBack()
     }
     return (
@@ -49,14 +93,20 @@ import { fontSize } from '../../../services/utilities/Fonts';
                 <InputField
                 lebal="Email"
                 type="email-address"
+                onChangeText={setEmail}
+                value={email}
                 />
                 <InputField
                 lebal="Name"
                 type="default"
+                onChangeText={setName}
+                value={name}
                 />
                 <InputField
                 lebal="Password"
                 type="default"
+                onChangeText={setPassword}
+                value={password}
                 secureTextEntry={true}
                 />
                 {/* <View style={styles.toggleContainer}>

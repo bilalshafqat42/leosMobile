@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {Colors} from '../../../services/utilities/Colors';
 import {appIcons, appImages} from '../../../services/utilities/Assets';
 import {scale} from 'react-native-size-matters';
@@ -20,14 +20,47 @@ import {
 import {fontFamily, fontSize} from '../../../services/utilities/Fonts';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
+import Toast from 'react-native-simple-toast';
+import { AuthContext } from '../../../navigation/AuthProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
+  const { login, user } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const SignUp = () => {
     navigation.navigate('SignUp');
   };
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
   const Login = () => {
-    navigation.navigate('App');
+    if (!isValidEmail(email)) {
+      Toast.show('Invalid email address', Toast.LONG);
+      return;
+    }
+
+    login(email, password)
+      // .then((user) => {
+      //   console.log('User:', user); 
+      //   if (user) {
+      //     return AsyncStorage.setItem('Token', user.uid);
+      //   } else {
+      //     throw new Error('Login failed');
+      //   }
+      // })
+      // .then(() => {
+      //   navigation.navigate('App');
+      //   Toast.show('Login Successful', Toast.LONG);
+      // })
+      // .catch((error) => {
+      //   console.error('Login error:', error); 
+      //   Toast.show('Please Check your email and Password', Toast.LONG);
+      // })
+      
   };
   return (
     <KeyboardAvoidingView
@@ -49,13 +82,15 @@ const Login = ({navigation}) => {
           </View>
           <View style={styles.fieldContainer}>
             <View style={styles.field}>
-              <InputField lebal="Email" type="email-address" />
+              <InputField lebal="Email" type="email-address" onChangeText={setEmail} value={email} />
             </View>
             <View style={{marginTop: responsiveHeight(1)}}>
               <InputField
                 lebal="Password"
                 type="default"
                 secureTextEntry={true}
+                onChangeText={setPassword} 
+                value={password}
               />
             </View>
           </View>

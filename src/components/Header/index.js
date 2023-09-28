@@ -1,15 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { scale } from 'react-native-size-matters';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {scale} from 'react-native-size-matters';
 import {
   responsiveFontSize,
   responsiveScreenHeight,
   responsiveScreenWidth,
 } from 'react-native-responsive-dimensions';
-import { Colors } from '../../services/utilities/Colors';
-import { appIcons } from '../../services/utilities/Assets';
+import {Colors} from '../../services/utilities/Colors';
+import {appIcons} from '../../services/utilities/Assets';
 
-const Header = (props) => {
+const Header = props => {
   const optionimage = {
     ...styles.headerback,
     height: scale(25),
@@ -21,17 +21,24 @@ const Header = (props) => {
 
   return (
     <View style={styles.header}>
-        <View style={{width:'100%'}}>
-      {props.Image && (
-        <TouchableOpacity
-          style={{ marginLeft: responsiveScreenWidth(3) }}
-          onPress={props.onPress}
-        >
-          <Image style={styles.headerback} source={appIcons.back} />
-        </TouchableOpacity>
-      )}</View>
-
-      
+      <View style={{width: '70%'}}>
+        {props.Image && (
+          <TouchableOpacity
+            style={{marginLeft: responsiveScreenWidth(3)}}
+            onPress={props.onPress}>
+            <Image style={styles.headerback} source={appIcons.back}/>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={{width:'30%'}}>
+        {props.options && (
+          <TouchableOpacity
+            style={{marginLeft: responsiveScreenWidth(7)}}
+            onPress={props.onPress}>
+            <Text style={{color:'white',fontSize:responsiveFontSize(3),fontWeight:'bold'}}>Logout</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -60,12 +67,12 @@ const styles = StyleSheet.create({
   headerback: {
     height: scale(25),
     width: scale(22),
-    marginLeft:'5%',
-    justifyContent: 'flex-start'
+    marginLeft: '5%',
+    justifyContent: 'flex-start',
   },
   logo: {
     width: scale(140),
     height: scale(25),
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
 });
