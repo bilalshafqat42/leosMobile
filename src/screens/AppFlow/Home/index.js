@@ -9,7 +9,6 @@ import firestore from '@react-native-firebase/firestore';
 const Home = ({ navigation }) => {
   const { logout, user } = useContext(AuthContext);
   const [imageData, setImageData] = useState([]);
-  const [unitsData, setUnitData] = useState([]);
   const logou = () => {
     logout();
   };
@@ -41,29 +40,36 @@ const Home = ({ navigation }) => {
   
       const snapshot = await dataCollectionRef.get();
   
-      const fieldNamesArray = [];
-      const fieldDataArray = [];
+      const pdfDataArray = [];
   
       snapshot.docs.forEach((doc) => {
         const documentData = doc.data();
-        
-        // Extract and store field names and field data separately
-        const fieldNames = Object.keys(documentData);
-        const fieldData = Object.values(documentData);
+        const { name, link1, link2, status, } = documentData;
   
-        fieldNamesArray.push(fieldNames);
-        fieldDataArray.push(fieldData);
+        
+  
+        // Check if the status is not "Sold" and if the timestamp is in the future
+        if (status !== 'Sold') {
+          // Create an object with the fetched data
+          const pdfData = {
+            name: name || '', // Use default values if fields are undefined
+            link1: link1 || '',
+            link2: link2 || '',
+            status: status || '',
+            
+          };
+  
+          pdfDataArray.push(pdfData);
+        }
       });
   
-      // Now, navigate to the 'Units' screen with the field names and field data
-      navigation.navigate('Units', { image, fieldNames: fieldNamesArray, fieldData: fieldDataArray });
+      // Now, navigate to the 'Units' screen with the filtered pdfDataArray
+      navigation.navigate('Units', { image, pdfDataArray });
   
     } catch (error) {
       console.error('Error fetching PDF data:', error);
     }
   };
-  
-  
 
   useEffect(() => {
     const fetchImageData = async () => {
@@ -73,6 +79,7 @@ const Home = ({ navigation }) => {
         const images = snapshot.docs.map((doc) => ({
           id: doc.id,
           image: doc.data().image,
+          timestamp: doc.data().timestamp, // Store the timestamp field
         }));
         setImageData(images);
       } catch (error) {
@@ -85,7 +92,7 @@ const Home = ({ navigation }) => {
 
   return (
     <>
-      <Header options={true} onPress={logou} />
+      <Header options={true} onPress={logou} showsButtons={false} showsPagination={false}/>
       <View style={styles.container}>
         <Swiper style={styles.wrapper} showsButtons={true}>
           {imageData.map((item) => (
