@@ -92,7 +92,7 @@ const Home = ({ navigation }) => {
 
   return (
     <>
-      <Header options={true} onPress={logou} showsButtons={false} showsPagination={false}/>
+      <Header options={true} onPress={logou}showsPagination={false}/>
       <View style={styles.container}>
         <Swiper style={styles.wrapper} showsButtons={true}>
           {imageData.map((item) => (
