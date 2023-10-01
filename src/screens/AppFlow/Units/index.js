@@ -19,6 +19,7 @@ import { AppStyles } from '../../../services/utilities/AppStyle';
 import RNFetchBlob from 'rn-fetch-blob'; // Import RNFetchBlob
 import { fontSize } from '../../../services/utilities/Fonts';
 import Header from '../../../components/Header';
+import { scale } from 'react-native-size-matters';
 
 const Units = ({ navigation, route }) => {
   const back = () =>{
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(85),
     height: responsiveHeight(8),
     backgroundColor: Colors.fieldBackground,
-    
+    borderRadius: scale(5),
     paddingHorizontal: '5%',
     alignItems: 'center',
     alignSelf:'center',
@@ -159,7 +160,8 @@ const styles = StyleSheet.create({
     height: responsiveHeight(3),
     justifyContent: 'center',
     alignItems:'center',
-    marginHorizontal:responsiveWidth(3)
+    marginHorizontal:responsiveWidth(3),
+    borderRadius: scale(5),
   },
   toggleContainer: {
     flexDirection: 'row',

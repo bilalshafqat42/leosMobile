@@ -1,5 +1,5 @@
 export const Colors ={
-    backgroud1: '#362636',
+    backgroud1: '#232323',
     fieldBackground : '#FFF',
     fbBackground : '#4267B2',
     button1: '#D9173B',

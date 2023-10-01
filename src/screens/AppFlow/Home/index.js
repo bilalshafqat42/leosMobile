@@ -5,6 +5,7 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 import { AuthContext } from '../../../navigation/AuthProvider';
 import Header from '../../../components/Header';
 import firestore from '@react-native-firebase/firestore';
+import { scale } from 'react-native-size-matters';
 
 const Home = ({ navigation }) => {
   const { logout, user } = useContext(AuthContext);
@@ -98,7 +99,7 @@ const Home = ({ navigation }) => {
               style={styles.touchableImage}
               onPress={() => handleImagePress(item)}
             >
-              <Image source={{ uri: item.image }} style={styles.images} />
+              <Image source={{ uri: item.image }} style={styles.images}  />
             </TouchableOpacity>
           ))}
         </Swiper>
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(10),
     width: responsiveWidth(80),
     height: responsiveHeight(70),
+    borderRadius: scale(5),
   },
 });
 
