@@ -33,7 +33,7 @@ const Header = props => {
       <View style={{width:'30%'}}>
         {props.options && (
           <TouchableOpacity
-            style={{marginLeft: responsiveScreenWidth(7)}}
+            style={{marginLeft: responsiveScreenWidth(7), marginTop: "30%"}}
             onPress={props.onPress}>
             <Text style={{color:'white',fontSize:responsiveFontSize(3),fontWeight:'bold'}}>Logout</Text>
           </TouchableOpacity>

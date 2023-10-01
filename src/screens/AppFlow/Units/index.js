@@ -14,20 +14,20 @@ import {
   responsiveFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { Colors } from '../../../services/utilities/Colors';
-import { AppStyles } from '../../../services/utilities/AppStyle';
+import {Colors} from '../../../services/utilities/Colors';
+import {AppStyles} from '../../../services/utilities/AppStyle';
 import RNFetchBlob from 'rn-fetch-blob'; // Import RNFetchBlob
-import { fontSize } from '../../../services/utilities/Fonts';
+import {fontSize} from '../../../services/utilities/Fonts';
 import Header from '../../../components/Header';
-import { scale } from 'react-native-size-matters';
+import {scale} from 'react-native-size-matters';
 
-const Units = ({ navigation, route }) => {
-  const back = () =>{
-    navigation.goBack()
-  }
-  const { image, pdfDataArray } = route.params;
+const Units = ({navigation, route}) => {
+  const back = () => {
+    navigation.goBack();
+  };
+  const {image, pdfDataArray} = route.params;
 
-  const handleDownloadPDF = async (pdfLink) => {
+  const handleDownloadPDF = async pdfLink => {
     try {
       if (Platform.OS === 'android') {
         const granted = await requestStoragePermissionAndroid();
@@ -35,7 +35,7 @@ const Units = ({ navigation, route }) => {
           console.log('Storage Permission Denied.');
           Alert.alert(
             'Storage Permission Required',
-            'Please grant storage permission to download the report.'
+            'Please grant storage permission to download the report.',
           );
         } else {
           console.log('Storage Permission Granted.');
@@ -49,11 +49,11 @@ const Units = ({ navigation, route }) => {
     }
   };
 
-  const downloadReport = async (pdfLink) => {
+  const downloadReport = async pdfLink => {
     const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
     const date = new Date();
     const fileName = `Report_Download_${Math.floor(
-      date.getTime() + date.getSeconds() / 2
+      date.getTime() + date.getSeconds() / 2,
     )}.pdf`;
     const path = `${PictureDir}/${fileName}`;
 
@@ -73,13 +73,13 @@ const Units = ({ navigation, route }) => {
       console.log('Report downloaded successfully to:', path);
       Alert.alert(
         'Report Downloaded Successfully',
-        `The report has been saved to ${path}`
+        `The report has been saved to ${path}`,
       );
     } catch (error) {
       console.error('Error downloading report:', error);
       Alert.alert(
         'Download Error',
-        'There was an error while downloading the report. Please try again later.'
+        'There was an error while downloading the report. Please try again later.',
       );
     }
   };
@@ -91,7 +91,7 @@ const Units = ({ navigation, route }) => {
         {
           title: 'Storage Permission Required',
           message: 'Please grant storage permission to download the report.',
-        }
+        },
       );
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     } catch (error) {
@@ -100,25 +100,23 @@ const Units = ({ navigation, route }) => {
     }
   };
 
-  const renderUnitItem = ({ item }) => (
+  const renderUnitItem = ({item}) => (
     <View style={styles.container}>
       <View style={styles.container1}>
-      <Text style={[styles.text, { fontWeight: 'bold' }]}>{item.name}</Text>
-      <Text style={[styles.text, { fontWeight: 'bold', }]}>Studio</Text>
+        <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
+        <Text style={[styles.text, {fontWeight: 'bold'}]}>Studio</Text>
       </View>
-      <View style={{flexDirection: 'row',}}>
-      <TouchableOpacity
-        style={styles.pdf}
-        onPress={() => handleDownloadPDF(item.link1)}
-      >
-        <Text style={styles.linkText}>Download PDF 1</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.pdf}
-        onPress={() => handleDownloadPDF(item.link2)}
-      >
-        <Text style={styles.linkText}>Download PDF 2</Text>
-      </TouchableOpacity>
+      <View style={[styles.container2, {flexDirection: 'row'}]}>
+        <TouchableOpacity
+          style={styles.pdf}
+          onPress={() => handleDownloadPDF(item.link1)}>
+          <Text style={styles.linkText}>Download 50 | 50</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.pdf}
+          onPress={() => handleDownloadPDF(item.link2)}>
+          <Text style={styles.linkText}>Download 60 | 40</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -132,7 +130,7 @@ const Units = ({ navigation, route }) => {
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={[
           AppStyles.contentContainer,
-          { backgroundColor: Colors.backgroud1 },
+          {backgroundColor: Colors.backgroud1},
         ]}
       />
     </>
@@ -144,24 +142,26 @@ export default Units;
 const styles = StyleSheet.create({
   container: {
     width: responsiveWidth(85),
-    height: responsiveHeight(8),
-    backgroundColor: Colors.fieldBackground,
+    height: responsiveHeight(10),
+    backgroundColor: Colors.unitsBackgroundColor,
     borderRadius: scale(5),
     paddingHorizontal: '5%',
+    // paddingVertical:"10%",
     alignItems: 'center',
-    alignSelf:'center',
+    alignSelf: 'center',
     justifyContent: 'space-between',
-    marginBottom: responsiveHeight(1),
+    marginBottom: responsiveHeight(2),
   },
   pdf: {
-    marginVertical:responsiveHeight(0.5),
-    backgroundColor:Colors.backgroud1,
-    width: responsiveWidth(35),
-    height: responsiveHeight(3),
+    marginVertical: responsiveHeight(0.5),
+    backgroundColor: Colors.backgroud1,
+    width: responsiveWidth(38),
+    height: responsiveHeight(4),
     justifyContent: 'center',
-    alignItems:'center',
-    marginHorizontal:responsiveWidth(3),
+    alignItems: 'center',
+    marginHorizontal: responsiveWidth(3),
     borderRadius: scale(5),
+    // padding: "5%",
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -179,16 +179,20 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.blackText,
     fontSize: fontSize.lebal,
-    width:'45%'
+    width: '45%',
   },
   linkText: {
     color: Colors.lebal,
     fontSize: fontSize.lebal,
   },
-  container1:{
-    marginTop:responsiveHeight(0.5),
-    flexDirection:'row',
-    justifyContent:'space-between',
-    width:'100%'
+  container1: {
+    marginTop: responsiveHeight(0.5),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: '6%',
+  },
+  container2:{
+    marginBottom: "3%"
   }
 });

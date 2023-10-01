@@ -1,5 +1,6 @@
 export const Colors ={
     backgroud1: '#232323',
+    unitsBackgroundColor: "#fff",
     fieldBackground : '#232323',
     fbBackground : '#232323',
     button1: '#c4a564',
@@ -10,7 +11,7 @@ export const Colors ={
     lebal: '#fff',
     loginText: '#e3e1dc',
     forgot : '#D9173B',
-    blackText: '#999999',
+    blackText: '#232323',
     border1: '#777',
     bordor2:'#777',
     barBackground: '#D9173B',
