@@ -96,7 +96,7 @@ const Login = ({navigation}) => {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              text={'Log In'}
+              text={'LOG IN'}
               background={Colors.button1}
               fontWeight={'900'}
               onPress={Login}

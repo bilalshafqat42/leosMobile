@@ -47,7 +47,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
-    height: responsiveScreenHeight(7.5),
+    height: responsiveScreenHeight(10.5),
     backgroundColor: Colors.backgroud1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     width: scale(22),
     marginLeft: '5%',
     justifyContent: 'flex-start',
+    marginTop: 20
   },
   logo: {
     width: scale(140),

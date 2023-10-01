@@ -16,7 +16,9 @@ const Splash = ({navigation}) => {
     }, []);
            
   return (
-    <View></View>
+    <View>
+      <Text>Leos International</Text>
+    </View>
    
   )
 }
