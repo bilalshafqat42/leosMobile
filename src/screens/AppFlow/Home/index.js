@@ -90,9 +90,9 @@ const Home = ({ navigation }) => {
 
   return (
     <>
-      <Header options={true} onPress={logou} showsButtons={false} showsPagination={false} />
+      <Header options={true} onPress={logou} showsButtons={false} />
       <View style={styles.container}>
-        <Swiper style={styles.wrapper} showsButtons={false} >
+        <Swiper style={styles.wrapper} showsButtons={false} showsPagination={false} >
           {imageData.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   images: {
-    marginBottom: responsiveHeight(10),
+    //marginBottom: responsiveHeight(10),
     width: responsiveWidth(80),
-    height: responsiveHeight(70),
+    height: responsiveHeight(80),
     borderRadius: scale(5),
   },
 });
