@@ -41,7 +41,6 @@ const Units = ({ navigation, route }) => {
           downloadReport(pdfLink);
         }
       } else {
-        // For iOS and other platforms, no permission check is needed
         downloadReport(pdfLink);
       }
     } catch (error) {

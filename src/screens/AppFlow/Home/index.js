@@ -50,9 +50,8 @@ const Home = ({ navigation }) => {
   
         // Check if the status is not "Sold" and if the timestamp is in the future
         if (status !== 'Sold') {
-          // Create an object with the fetched data
           const pdfData = {
-            name: name || '', // Use default values if fields are undefined
+            name: name || '', 
             link1: link1 || '',
             link2: link2 || '',
             status: status || '',
@@ -62,8 +61,6 @@ const Home = ({ navigation }) => {
           pdfDataArray.push(pdfData);
         }
       });
-  
-      // Now, navigate to the 'Units' screen with the filtered pdfDataArray
       navigation.navigate('Units', { image, pdfDataArray });
   
     } catch (error) {
@@ -79,7 +76,7 @@ const Home = ({ navigation }) => {
         const images = snapshot.docs.map((doc) => ({
           id: doc.id,
           image: doc.data().image,
-          timestamp: doc.data().timestamp, // Store the timestamp field
+          timestamp: doc.data().timestamp, 
         }));
         setImageData(images);
       } catch (error) {
@@ -92,9 +89,9 @@ const Home = ({ navigation }) => {
 
   return (
     <>
-      <Header options={true} onPress={logou}showsPagination={false}/>
+      <Header options={true} onPress={logou} showsButtons={false} showsPagination={false} />
       <View style={styles.container}>
-        <Swiper style={styles.wrapper} showsButtons={true}>
+        <Swiper style={styles.wrapper} showsButtons={false} >
           {imageData.map((item) => (
             <TouchableOpacity
               key={item.id}
