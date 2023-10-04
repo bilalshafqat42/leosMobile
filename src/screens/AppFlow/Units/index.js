@@ -104,9 +104,13 @@ const Units = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.container1}>
         <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
-        <Text style={[styles.text, {fontWeight: 'bold'}]}>Studio</Text>
+        {/* <Text style={[styles.text]}>Studio</Text> */}
       </View>
-      <View style={[styles.container2, {flexDirection: 'row'}]}>
+      <View style={styles.container2}>
+        <Text style={[styles.text]}>1 Br. | 887.92 sq ft</Text>
+        {/* <Text style={[styles.text]}></Text> */}
+      </View>
+      <View style={[styles.container3, {flexDirection: 'row'}]}>
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link1)}>
@@ -142,10 +146,10 @@ export default Units;
 const styles = StyleSheet.create({
   container: {
     width: responsiveWidth(85),
-    height: responsiveHeight(10),
+    height: responsiveHeight(15),
     backgroundColor: Colors.unitsBackgroundColor,
     borderRadius: scale(5),
-    paddingHorizontal: '5%',
+    paddingHorizontal: '3%',
     // paddingVertical:"10%",
     alignItems: 'center',
     alignSelf: 'center',
@@ -179,7 +183,7 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.blackText,
     fontSize: fontSize.lebal,
-    width: '45%',
+    width: '49%',
   },
   linkText: {
     color: Colors.lebal,
@@ -192,7 +196,18 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: '6%',
   },
-  container2:{
-    marginBottom: "3%"
-  }
+  container2: {
+    // flexDirection: 'row',
+    // justifyContent: 'start',
+    width: '100%',
+    marginTop: '0%',
+    marginBottom: '0%',
+  },
+  container3: {
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // width: '100%',
+    // marginTop: '6%',
+    marginBottom: '3%',
+  },
 });
