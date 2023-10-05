@@ -14,7 +14,7 @@ const Button = props => {
     backgroundColor: props.background ? props.background : 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: scale(25),
+    borderRadius: scale(6),
   };
   const textStyles = {
     color:  Colors.lebal,
