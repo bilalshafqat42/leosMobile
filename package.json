@@ -25,6 +25,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-simple-toast": "^3.0.1",
     "react-native-size-matters": "^0.4.0",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-swiper": "^1.6.0",
     "rn-fetch-blob": "^0.12.0"
   },
