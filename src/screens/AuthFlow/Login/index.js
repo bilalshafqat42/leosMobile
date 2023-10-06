@@ -15,6 +15,8 @@ import {scale} from 'react-native-size-matters';
 import {AppStyles} from '../../../services/utilities/AppStyle';
 import {
   responsiveHeight,
+  responsiveScreenHeight,
+  responsiveScreenWidth,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {fontFamily, fontSize} from '../../../services/utilities/Fonts';
@@ -154,8 +156,8 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(1),
   },
   leosLogoDesign: {
-    width: scale(200),
-    height: scale(200),
+    width: scale(210),
+    height: scale(210),
     marginBottom: '5%',
   },
 });

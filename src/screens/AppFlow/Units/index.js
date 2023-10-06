@@ -55,7 +55,10 @@ const Units = ({navigation, route}) => {
     const fileName = `Report_Download_${Math.floor(
       date.getTime() + date.getSeconds() / 2,
     )}.pdf`;
-    const path = `${PictureDir}/${fileName}`;
+
+    const subfolderName = 'bilalapp';
+    const subfolderPath = `${PictureDir}/${subfolderName}`; // Path to the subfolder
+    const path = `${subfolderPath}/${fileName}`; // Full path including subfolder
 
     const options = {
       fileCache: true,

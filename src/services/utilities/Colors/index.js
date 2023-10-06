@@ -3,7 +3,7 @@ export const Colors ={
     unitsBackgroundColor: "#fff",
     fieldBackground : '#232323',
     fbBackground : '#232323',
-    button1: '#c4a564',
+    button1: '#CEA65F',
     button2: '#fff',
     blackColorText: "#232323",
     text: '#e3e1dc',
