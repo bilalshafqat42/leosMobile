@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,12 +20,52 @@ import RNFetchBlob from 'rn-fetch-blob'; // Import RNFetchBlob
 import {fontSize} from '../../../services/utilities/Fonts';
 import Header from '../../../components/Header';
 import {scale} from 'react-native-size-matters';
+import Share from 'react-native-share';
 
 const Units = ({navigation, route}) => {
+  const [sortedPdfDataArray, setSortedPdfDataArray] = useState([]);
+  const sortData = (data) => {
+    return data.sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+  
+      // Extract the alphanumeric part of the name
+      const alphaNumericA = nameA.match(/[a-zA-Z]+|[0-9]+/g);
+      const alphaNumericB = nameB.match(/[a-zA-Z]+|[0-9]+/g);
+  
+      // Compare each part of the alphanumeric strings
+      for (let i = 0; i < Math.min(alphaNumericA.length, alphaNumericB.length); i++) {
+        if (isNaN(alphaNumericA[i]) && isNaN(alphaNumericB[i])) {
+          // Both parts are alphabetic, compare them as strings
+          const comparison = alphaNumericA[i].localeCompare(alphaNumericB[i]);
+          if (comparison !== 0) {
+            return comparison;
+          }
+        } else {
+          // At least one part is numeric, compare them as numbers
+          const numA = parseFloat(alphaNumericA[i]) || 0;
+          const numB = parseFloat(alphaNumericB[i]) || 0;
+          if (numA !== numB) {
+            return numA - numB;
+          }
+        }
+      }
+  
+      // If all parts are equal, compare the full strings
+      return nameA.localeCompare(nameB);
+    });
+  };
+  useEffect(() => {
+    // Sort the pdfDataArray and set it in the state
+    const sortedData = sortData(pdfDataArray);
+    setSortedPdfDataArray(sortedData);
+  }, [pdfDataArray]);
   const back = () => {
     navigation.goBack();
   };
   const {image, pdfDataArray} = route.params;
+  // const [Path, setPath] = useState('';) 
+  
 
   const handleDownloadPDF = async pdfLink => {
     try {
@@ -43,11 +83,27 @@ const Units = ({navigation, route}) => {
         }
       } else {
         downloadReport(pdfLink);
+        // sharefile(pdfLink);
       }
     } catch (error) {
       console.error('Error checking storage permission:', error);
     }
   };
+  const sharefile =async path =>{
+    const options = {
+      title: 'Share via',
+      message: 'Check out this file!',
+      url: `file://${path}`,
+      type: 'application/pdf',
+    };
+    await Share.open(options)
+    .then(res => {
+      console.log('Shared successfully');
+    })
+    .catch(error => {
+      console.error('Error sharing:', error);
+    });
+  }
 
   const downloadReport = async pdfLink => {
     const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
@@ -55,21 +111,25 @@ const Units = ({navigation, route}) => {
     const fileName = `Report_Download_${Math.floor(
       date.getTime() + date.getSeconds() / 2,
     )}.pdf`;
-
     const subfolderName = 'bilalapp';
-    const subfolderPath = `${PictureDir}/${subfolderName}`; // Path to the subfolder
-    const path = `${subfolderPath}/${fileName}`; // Full path including subfolder
-
-    const options = {
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path,
-        description: 'Risk Report Download',
-        title: fileName,
+    const subfolderPath = `${PictureDir}/${subfolderName}`;
+    const path = `${subfolderPath}/${fileName}`;
+    const options = Platform.select({
+      android: {
+        fileCache: true,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          path,
+          description: 'Risk Report Download',
+          title: fileName,
+        },
       },
-    };
+      ios: {
+        fileCache: true,
+        path,
+      },
+    });
 
     try {
       await RNFetchBlob.config(options).fetch('GET', pdfLink); // Use RNFetchBlob.config
@@ -78,6 +138,7 @@ const Units = ({navigation, route}) => {
         'Report Downloaded Successfully',
         `The report has been saved to ${path}`,
       );
+      sharefile(path);
     } catch (error) {
       console.error('Error downloading report:', error);
       Alert.alert(
@@ -107,22 +168,20 @@ const Units = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.container1}>
         <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
-        {/* <Text style={[styles.text]}>Studio</Text> */}
+        
       </View>
-      <View style={styles.container2}>
-        <Text style={[styles.text]}>1 Br. | 887.92 sq ft</Text>
-        {/* <Text style={[styles.text]}></Text> */}
-      </View>
-      <View style={[styles.container3, {flexDirection: 'row'}]}>
+      <View style={{width:'100%'}}>
+      <Text style={[styles.text]}>{item.bed} | {item.area}</Text></View>
+      <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link1)}>
-          <Text style={styles.linkText}>Download 50 | 50</Text>
+          <Text style={styles.linkText}>Download PDF 1</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link2)}>
-          <Text style={styles.linkText}>Download 60 | 40</Text>
+          <Text style={styles.linkText}>Download PDF 2</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -132,7 +191,7 @@ const Units = ({navigation, route}) => {
     <>
       <Header onPress={back} Image={true} />
       <FlatList
-        data={pdfDataArray} // Use pdfDataArray as the data source
+        data={sortedPdfDataArray}
         renderItem={renderUnitItem}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={[
