@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -24,17 +24,21 @@ import Share from 'react-native-share';
 
 const Units = ({navigation, route}) => {
   const [sortedPdfDataArray, setSortedPdfDataArray] = useState([]);
-  const sortData = (data) => {
+  const sortData = data => {
     return data.sort((a, b) => {
       const nameA = a.name.toLowerCase();
       const nameB = b.name.toLowerCase();
-  
+
       // Extract the alphanumeric part of the name
       const alphaNumericA = nameA.match(/[a-zA-Z]+|[0-9]+/g);
       const alphaNumericB = nameB.match(/[a-zA-Z]+|[0-9]+/g);
-  
+
       // Compare each part of the alphanumeric strings
-      for (let i = 0; i < Math.min(alphaNumericA.length, alphaNumericB.length); i++) {
+      for (
+        let i = 0;
+        i < Math.min(alphaNumericA.length, alphaNumericB.length);
+        i++
+      ) {
         if (isNaN(alphaNumericA[i]) && isNaN(alphaNumericB[i])) {
           // Both parts are alphabetic, compare them as strings
           const comparison = alphaNumericA[i].localeCompare(alphaNumericB[i]);
@@ -50,7 +54,7 @@ const Units = ({navigation, route}) => {
           }
         }
       }
-  
+
       // If all parts are equal, compare the full strings
       return nameA.localeCompare(nameB);
     });
@@ -64,8 +68,7 @@ const Units = ({navigation, route}) => {
     navigation.goBack();
   };
   const {image, pdfDataArray} = route.params;
-  // const [Path, setPath] = useState('';) 
-  
+  // const [Path, setPath] = useState('';)
 
   const handleDownloadPDF = async pdfLink => {
     try {
@@ -89,7 +92,7 @@ const Units = ({navigation, route}) => {
       console.error('Error checking storage permission:', error);
     }
   };
-  const sharefile =async path =>{
+  const sharefile = async path => {
     const options = {
       title: 'Share via',
       message: 'Check out this file!',
@@ -97,13 +100,13 @@ const Units = ({navigation, route}) => {
       type: 'application/pdf',
     };
     await Share.open(options)
-    .then(res => {
-      console.log('Shared successfully');
-    })
-    .catch(error => {
-      console.error('Error sharing:', error);
-    });
-  }
+      .then(res => {
+        console.log('Shared successfully');
+      })
+      .catch(error => {
+        console.error('Error sharing:', error);
+      });
+  };
 
   const downloadReport = async pdfLink => {
     const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
@@ -168,11 +171,13 @@ const Units = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.container1}>
         <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
-        
       </View>
-      <View style={{width:'100%'}}>
-      <Text style={[styles.text]}>{item.bed} | {item.area}</Text></View>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{width: '100%'}}>
+        <Text style={[styles.text]}>
+          {item.bed} | {item.area}
+        </Text>
+      </View>
+      <View style={[styles.downloadAreaSection, {flexDirection: 'row'}]}>
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link1)}>
@@ -270,6 +275,9 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
     // width: '100%',
     // marginTop: '6%',
+    marginBottom: '3%',
+  },
+  downloadAreaSection: {
     marginBottom: '3%',
   },
 });

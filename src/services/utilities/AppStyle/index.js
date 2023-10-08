@@ -7,6 +7,7 @@ import { scale } from 'react-native-size-matters'
 export const AppStyles = StyleSheet.create({
     contentContainer: {
         flexGrow: 1,
+        backgroundColor: Colors.backgroud1
       },
       button:{
         alignItems:'center',
