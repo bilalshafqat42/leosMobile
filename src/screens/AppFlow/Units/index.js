@@ -173,7 +173,7 @@ const Units = ({navigation, route}) => {
         <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
       </View>
       <View style={{width: '100%'}}>
-        <Text style={[styles.text]}>
+        <Text style={[styles.bedroomText]}>
           {item.bed} | {item.area}
         </Text>
       </View>
@@ -252,6 +252,9 @@ const styles = StyleSheet.create({
     fontSize: fontSize.lebal,
     width: '49%',
   },
+  bedroomText:{    color: Colors.blackText,
+    fontSize: fontSize.lebal,
+    width: '100%',},
   linkText: {
     color: Colors.lebal,
     fontSize: fontSize.lebal,
