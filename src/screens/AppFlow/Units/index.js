@@ -109,46 +109,83 @@ const Units = ({navigation, route}) => {
   };
 
   const downloadReport = async pdfLink => {
-    const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
+    let dirs = RNFetchBlob.fs.dirs;
     const date = new Date();
     const fileName = `Report_Download_${Math.floor(
       date.getTime() + date.getSeconds() / 2,
     )}.pdf`;
-    const subfolderName = 'bilalapp';
-    const subfolderPath = `${PictureDir}/${subfolderName}`;
-    const path = `${subfolderPath}/${fileName}`;
-    const options = Platform.select({
-      android: {
-        fileCache: true,
-        addAndroidDownloads: {
-          useDownloadManager: true,
-          notification: true,
-          path,
-          description: 'Risk Report Download',
-          title: fileName,
-        },
+    const path = `${dirs.DocumentDir}/${fileName}`;
+    RNFetchBlob.config({
+      fileCache: true,
+      appendExt: 'pdf',
+      path: path,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        title: fileName,
+        description: 'File downloaded by download manager.',
+        mime: 'application/pdf',
       },
-      ios: {
-        fileCache: true,
-        path,
-      },
-    });
+    })
+      .fetch('GET', pdfLink)
+      .then(res => {
+        // in iOS, we want to save our files by opening up the saveToFiles bottom sheet action.
+        // whereas in android, the download manager is handling the download for us.
+        Alert.alert(
+          'Report Downloaded Successfully',
+          `The report has been saved to ${path}`,
+        );
+        if (Platform.OS === 'ios') {
+          sharefile(path);
+        }
+      })
+      .catch(err => {
+        console.log('BLOB ERROR -> ', err);
+        Alert.alert(
+          'Download Error',
+          'There was an error while downloading the report. Please try again later.',
+        );
+      });
+    // const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
+    // const date = new Date();
+    // const fileName = `Report_Download_${Math.floor(
+    //   date.getTime() + date.getSeconds() / 2,
+    // )}.pdf`;
+    // const subfolderName = 'bilalapp';
+    // const subfolderPath = `${PictureDir}/${subfolderName}`;
+    // const path = `${subfolderPath}/${fileName}`;
+    // const options = Platform.select({
+    //   android: {
+    //     fileCache: true,
+    //     addAndroidDownloads: {
+    //       useDownloadManager: true,
+    //       notification: true,
+    //       path,
+    //       description: 'Risk Report Download',
+    //       title: fileName,
+    //     },
+    //   },
+    //   ios: {
+    //     fileCache: true,
+    //     path,
+    //   },
+    // });
 
-    try {
-      await RNFetchBlob.config(options).fetch('GET', pdfLink); // Use RNFetchBlob.config
-      console.log('Report downloaded successfully to:', path);
-      Alert.alert(
-        'Report Downloaded Successfully',
-        `The report has been saved to ${path}`,
-      );
-      sharefile(path);
-    } catch (error) {
-      console.error('Error downloading report:', error);
-      Alert.alert(
-        'Download Error',
-        'There was an error while downloading the report. Please try again later.',
-      );
-    }
+    // try {
+    //   await RNFetchBlob.config(options).fetch('GET', pdfLink); // Use RNFetchBlob.config
+    //   console.log('Report downloaded successfully to:', path);
+    //   Alert.alert(
+    //     'Report Downloaded Successfully',
+    //     `The report has been saved to ${path}`,
+    //   );
+    //   sharefile(path);
+    // } catch (error) {
+    //   console.error('Error downloading report:', error);
+    //   Alert.alert(
+    //     'Download Error',
+    //     'There was an error while downloading the report. Please try again later.',
+    //   );
+    // }
   };
 
   const requestStoragePermissionAndroid = async () => {
