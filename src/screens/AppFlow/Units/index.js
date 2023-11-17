@@ -141,10 +141,10 @@ const Units = ({navigation, route}) => {
       })
       .catch(err => {
         console.log('BLOB ERROR -> ', err);
-        Alert.alert(
-          'Download Error',
-          'There was an error while downloading the report. Please try again later.',
-        );
+        // Alert.alert(
+        //   'Download Error',
+        //   'There was an error while downloading the report. Please try again later.',
+        // );
       });
     // const PictureDir = RNFetchBlob.fs.dirs.DownloadDir;
     // const date = new Date();
@@ -206,10 +206,10 @@ const Units = ({navigation, route}) => {
 
   const renderUnitItem = ({item}) => (
     <View style={styles.container}>
-      <View style={styles.container1}>
+      <View style={[styles.container1, {marginBottom: '1%'}]}>
         <Text style={[styles.text, {fontWeight: 'bold'}]}>{item.name}</Text>
       </View>
-      <View style={{width: '100%'}}>
+      <View style={{width: '100%', marginBottom: '3%'}}>
         <Text style={[styles.bedroomText]}>
           {item.bed} | {item.area}
         </Text>
@@ -218,14 +218,24 @@ const Units = ({navigation, route}) => {
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link1)}>
-          <Text style={styles.linkText}>Download PDF 1</Text>
+          <Text style={styles.linkText}>{item.b1}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.pdf}
           onPress={() => handleDownloadPDF(item.link2)}>
-          <Text style={styles.linkText}>Download PDF 2</Text>
+          <Text style={styles.linkText}>{item.b2}</Text>
         </TouchableOpacity>
       </View>
+      {item.link3 !== '' && (
+        <TouchableOpacity
+          style={[
+            styles.pdf,
+            {alignSelf: 'flex-start', marginLeft: responsiveWidth(-1.2)},
+          ]}
+          onPress={() => handleDownloadPDF(item.link3)}>
+          <Text style={styles.linkText}>{item.b3}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -250,11 +260,10 @@ export default Units;
 const styles = StyleSheet.create({
   container: {
     width: responsiveWidth(85),
-    height: responsiveHeight(15),
     backgroundColor: Colors.unitsBackgroundColor,
     borderRadius: scale(5),
     paddingHorizontal: '3%',
-    // paddingVertical:"10%",
+    paddingVertical: '3%',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'space-between',
@@ -289,9 +298,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize.lebal,
     width: '49%',
   },
-  bedroomText:{    color: Colors.blackText,
+  bedroomText: {
+    color: Colors.blackText,
     fontSize: fontSize.lebal,
-    width: '100%',},
+    width: '100%',
+  },
   linkText: {
     color: Colors.lebal,
     fontSize: fontSize.lebal,
@@ -301,7 +312,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: '6%',
+    // marginTop: '6%',
   },
   container2: {
     // flexDirection: 'row',

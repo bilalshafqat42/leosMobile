@@ -6,12 +6,15 @@ import { AuthContext } from '../../../navigation/AuthProvider';
 import Header from '../../../components/Header';
 import firestore from '@react-native-firebase/firestore';
 import { scale } from 'react-native-size-matters';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ navigation }) => {
   const { logout, user } = useContext(AuthContext);
   const [imageData, setImageData] = useState([]);
-  const logou = () => {
+  const logou = async() => {
+    await AsyncStorage.removeItem('Token');
     logout();
+    navigation.navigate('Auth', {screen: 'Login'});
   };
 
   useEffect(() => {
@@ -45,15 +48,19 @@ const Home = ({ navigation }) => {
   
       snapshot.docs.forEach((doc) => {
         const documentData = doc.data();
-        const { name, link1, link2, status, bed, area } = documentData;
+        const { name, link1, link2, status, bed, area, link3, b1, b2, b3 } = documentData;
         if (status !== 'Sold') {
           const pdfData = {
             name: name || '', 
             link1: link1 || '',
             link2: link2 || '',
+            link3: link3 || '',
             status: status || '',
             bed: bed || '',
             area: area || '',
+            b1: b1 || '',
+            b2: b2 || '',
+            b3: b3 || ''
           };
   
           pdfDataArray.push(pdfData);
